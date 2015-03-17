@@ -1,5 +1,6 @@
 package comd7shah.github.www.buber1;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -9,7 +10,7 @@ import android.view.MenuItem;
 import com.parse.ParseUser;
 
 
-public class Main extends ActionBarActivity {
+public class Main extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

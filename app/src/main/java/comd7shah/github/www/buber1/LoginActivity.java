@@ -55,16 +55,17 @@ public class LoginActivity extends Activity {
 
 
                 //login the user using parse sdk
+
                 ParseUser.logInInBackground(username, password, new LogInCallback() {
-                    @Override
+
                     public void done(ParseUser parseUser, ParseException e) {
                         if (e == null) {
                             //success! user logged in
                             Toast.makeText(LoginActivity.this, "Welcome Back!", Toast.LENGTH_LONG).show();
 
                             //take user to the homepage
-                            Intent takeUserHome = new Intent(LoginActivity.this, Main.class);
-                            startActivity(takeUserHome);
+                            Intent takeUserToMain = new Intent(LoginActivity.this, Main.class);
+                            startActivity(takeUserToMain);
                         }
 
                         else {

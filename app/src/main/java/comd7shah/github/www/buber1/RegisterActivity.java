@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
@@ -29,9 +30,7 @@ public class RegisterActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         // Enable Local Datastore.
-        Parse.enableLocalDatastore(this);
-
-        Parse.initialize(this, "DR9Ivs2PTPRPM1OGJgnhfC7Rv28i7OvKM0TUdXsg", "nmaBhQsdOgPtwI4YFZYAAHVr6pYoJibteGzupFK2");
+        //Parse.enableLocalDatastore(this);
 
 
         //initialize
@@ -46,7 +45,6 @@ public class RegisterActivity extends Activity {
             public void onClick(View v) {
 
 
-
                 //get the username, password, and emaill and convert them to string
                 String username = mUsername.getText().toString().trim();
                 String password = mUserPassword.getText().toString().trim();
@@ -58,17 +56,15 @@ public class RegisterActivity extends Activity {
                 user.setPassword(password);
                 user.setEmail(email);
                 user.signUpInBackground(new SignUpCallback() {
-
-
                     @Override
-                    public void done(com.parse.ParseException e) {
+                    public void done(ParseException e) {
                         if (e == null) {
                             //user signed up successfully
                             Toast.makeText(RegisterActivity.this, "Successfully Signed Up!", Toast.LENGTH_LONG).show();
 
                             //take user to homepage
-                            Intent takeUserHome = new Intent(RegisterActivity.this, Main.class);
-                            startActivity(takeUserHome);
+                            Intent takeUsertoMain = new Intent(RegisterActivity.this, Main.class);
+                            startActivity(takeUsertoMain);
 
                         } else {
                             //there was an error signing up user. advice user
@@ -91,33 +87,32 @@ public class RegisterActivity extends Activity {
                         }
                     }
                 });
+            }
 
+                });
 
             }
-        });
-    }
 
 
+            @Override
+            public boolean onCreateOptionsMenu(Menu menu) {
+                // Inflate the menu; this adds items to the action bar if it is present.
+                getMenuInflater().inflate(R.menu.menu_register, menu);
+                return true;
+            }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_register, menu);
-        return true;
-    }
+            @Override
+            public boolean onOptionsItemSelected(MenuItem item) {
+                // Handle action bar item clicks here. The action bar will
+                // automatically handle clicks on the Home/Up button, so long
+                // as you specify a parent activity in AndroidManifest.xml.
+                int id = item.getItemId();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+                //noinspection SimplifiableIfStatement
+                if (id == R.id.action_settings) {
+                    return true;
+                }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+                return super.onOptionsItemSelected(item);
+            }
         }
-
-        return super.onOptionsItemSelected(item);
-    }
-}
