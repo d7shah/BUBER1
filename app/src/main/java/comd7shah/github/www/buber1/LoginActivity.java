@@ -12,68 +12,65 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.parse.Parse;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 
-public class RegisterActivity extends Activity {
+public class LoginActivity extends Activity {
 
     protected EditText mUsername;
-    protected EditText mUserEmail;
-    protected EditText mUserPassword;
-    protected Button mRegisterButton;
+    protected EditText mPassword;
+    protected Button mLoginBtn;
+    protected Button mCreateAccountBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-        // Enable Local Datastore.
-        Parse.enableLocalDatastore(this);
-
-        Parse.initialize(this, "DR9Ivs2PTPRPM1OGJgnhfC7Rv28i7OvKM0TUdXsg", "nmaBhQsdOgPtwI4YFZYAAHVr6pYoJibteGzupFK2");
-
+        setContentView(R.layout.activity_login);
 
         //initialize
-        mUsername = (EditText)findViewById(R.id.usernameRegisterEditText);
-        mUserEmail = (EditText)findViewById(R.id.emailRegisterEditText);
-        mUserPassword = (EditText)findViewById(R.id.passwordRegisterEditText);
-        mRegisterButton = (Button)findViewById(R.id.registerButton);
+        mUsername = (EditText) findViewById(R.id.usernameLoginTextBox);
+        mPassword = (EditText) findViewById(R.id.passwordLoginTextBox);
+        mLoginBtn = (Button) findViewById(R.id.loginBtn);
+        mCreateAccountBtn = (Button) findViewById(R.id.createAccountbtnLogin);
 
-        //listen to register button click
-        mRegisterButton.setOnClickListener(new View.OnClickListener() {
+        //listen to CreateAccountBtn click
+        mCreateAccountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //take user to register
+                Intent takeUserToRegister = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(takeUserToRegister);
+            }
+        });
 
-
-
-                //get the username, password, and emaill and convert them to string
+        //listen to when the mlogin button is clicked
+        mLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //get the user inputs from the edit text and convert to string
                 String username = mUsername.getText().toString().trim();
-                String password = mUserPassword.getText().toString().trim();
-                String email = mUserEmail.getText().toString().trim();
-
-                //store user in parse
-                ParseUser user = new ParseUser();
-                user.setUsername(username);
-                user.setPassword(password);
-                user.setEmail(email);
-                user.signUpInBackground(new SignUpCallback() {
+                String password = mPassword.getText().toString().trim();
 
 
+                //login the user using parse sdk
+                ParseUser.logInInBackground(username, password, new LogInCallback() {
                     @Override
-                    public void done(com.parse.ParseException e) {
+                    public void done(ParseUser parseUser, ParseException e) {
                         if (e == null) {
-                            //user signed up successfully
-                            Toast.makeText(RegisterActivity.this, "Successfully Signed Up!", Toast.LENGTH_LONG).show();
+                            //success! user logged in
+                            Toast.makeText(LoginActivity.this, "Welcome Back!", Toast.LENGTH_LONG).show();
 
-                            //take user to homepage
-                            Intent takeUserHome = new Intent(RegisterActivity.this, Main.class);
+                            //take user to the homepage
+                            Intent takeUserHome = new Intent(LoginActivity.this, Main.class);
                             startActivity(takeUserHome);
+                        }
 
-                        } else {
-                            //there was an error signing up user. advice user
+                        else {
+
                             //sorry there was a problem. Advice user
-                            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                             builder.setMessage(e.getMessage());
                             builder.setTitle("Sorry!");
                             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -89,20 +86,24 @@ public class RegisterActivity extends Activity {
                             AlertDialog dialog = builder.create();
                             dialog.show();
                         }
+
+
                     }
+
+
                 });
 
 
             }
         });
-    }
 
+    }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_register, menu);
+        getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
     }
 

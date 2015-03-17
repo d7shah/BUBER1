@@ -1,9 +1,12 @@
 package comd7shah.github.www.buber1;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.parse.ParseUser;
 
 
 public class Main extends ActionBarActivity {
@@ -12,6 +15,17 @@ public class Main extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+           //show user the homepage
+
+
+        } else {
+            // show the signup or login screen
+            Intent takeUserToLogin = new Intent(this, LoginActivity.class);
+            startActivity(takeUserToLogin);
+        }
     }
 
 
@@ -30,9 +44,17 @@ public class Main extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.LogoutUser:
+                //logout the user
+                ParseUser.logOut();
+
+                //take the user back to login screen
+                Intent takeUserToLogin = new Intent(this, LoginActivity.class);
+                startActivity(takeUserToLogin);
+                break;
         }
+
 
         return super.onOptionsItemSelected(item);
     }
